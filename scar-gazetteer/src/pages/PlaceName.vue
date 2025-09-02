@@ -4,8 +4,10 @@
                 v-if="$store.state.user.isAdmin">Edit</b-button></h1>
         <b-badge>Name ID: {{ place.name_id }}</b-badge> <b-badge>Place ID: {{ place.place_id }}</b-badge><br>
         <p v-if="place.feature_types">Feature Type: <a
-                :href="`https://data.aad.gov.au/feature-type/${place.feature_types.feature_type_code}`">{{ place.feature_types.feature_type_name }}</a>
-            <b-icon-info-circle v-b-tooltip.hover :title="place.feature_types.definition" /></p>
+                :href="`https://data.aad.gov.au/feature-type/${place.feature_types.feature_type_code}`">{{
+                    place.feature_types.feature_type_name }}</a>
+            <b-icon-info-circle v-b-tooltip.hover :title="place.feature_types.definition" />
+        </p>
 
         <audio v-if="place.pronunciation_audio_url" controls>
             <source :src="place.pronunciation_audio_url" type="audio/mpeg">
@@ -26,26 +28,24 @@
             </ul>
         </div>
 
-        <h3>Narrative</h3>
         <div v-if="place.narrative">
+            <h3>Narrative</h3>
             <p>
-                <component
-                    v-for="(part, index) in transformedNarrativeParts"
-                    :key="index"
-                    :is="part.component"
-                    v-bind="part.props"
-                >
+                <component v-for="(part, index) in transformedNarrativeParts" :key="index" :is="part.component"
+                    v-bind="part.props">
                     {{ part.text }}
                 </component>
             </p>
         </div>
-        <!-- <p>{{place.narrative}}</p> -->
 
         <div v-if="place.narrative_translation">
             <h3>Narrative Translation</h3>
             <p>{{ place.narrative_translation }}</p>
-            <b-alert variant="info" show><b-icon-info-circle-fill /> Note: This text has been machine-translated and may
-                not be accurate.</b-alert>
+            <div v-if="place.machine_translation">
+                <b-alert variant="info" show><b-icon-info-circle-fill /> Note: This text has been machine-translated and
+                    may
+                    not be accurate.</b-alert>
+            </div>
         </div>
 
         <div v-if="place.named_for">
@@ -87,8 +87,8 @@
 
         <h3>Location</h3>
         <ul>
-            <li>Latitude: {{ place.latitude }}° ({{ toDMS(place.latitude, isLatitude=true) }})</li>
-            <li>Longitude: {{ place.longitude }}° ({{ toDMS(place.longitude, isLatitude=false) }})</li>
+            <li>Latitude: {{ place.latitude }}° ({{ toDMS(place.latitude, isLatitude = true) }})</li>
+            <li>Longitude: {{ place.longitude }}° ({{ toDMS(place.longitude, isLatitude = false) }})</li>
             <li>Altitude: {{ place.altitude || "Not Recorded" }}</li>
         </ul>
         <h3>Map</h3>
