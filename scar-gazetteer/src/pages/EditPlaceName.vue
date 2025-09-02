@@ -1,7 +1,7 @@
 <template>
     <b-container>
         <h1>Edit place name</h1>
-        <place-name-form v-if="!form_data.$get.isPending" :form="form_data" v-on:reset="reset" v-on:submit="submit" />
+        <place-name-form v-if="!form_data.$get.isPending" :form="form_data" v-on:reset="reset" v-on:submit="submit" v-on:deletePlacename="deletePlacename" />
     </b-container>
 </template>
 
@@ -41,6 +41,15 @@ export default {
         },
         reset() {
             this.form_data.$get()
+        },
+        deletePlacename(form_data) {
+            form_data.$delete({ headers: { Prefer: 'return=minimal' } })
+                .then(() => {
+                    this.$router.push({ path: '/' })
+                })
+                .catch(err => {
+                    console.error("DELETE failed", err)
+                })
         }
     }
 }

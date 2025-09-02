@@ -233,8 +233,9 @@
                 />
             </b-form-group>
             <br />
-            <b-button  type="submit" variant="primary">Submit</b-button>
+            <b-button type="submit" variant="primary">Submit</b-button>
             <b-button variant="secondary" @click="reset">Reset</b-button>
+            <b-button v-if="$route.path !== '/new-name'" variant="danger"  @click="deletePlacename">Delete</b-button>
         </b-form>
 </template>
 
@@ -385,6 +386,12 @@ export default {
         },
         reset () {
             this.$emit('reset')
+        },
+        deletePlacename() {
+            if (!window.confirm("Confirm record deletion? This cannot be undone.")) {
+                return
+            }
+            this.$emit('deletePlacename', this.form_data)
         }
     }
 }
