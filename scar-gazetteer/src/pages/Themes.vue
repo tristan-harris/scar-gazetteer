@@ -34,7 +34,7 @@
             </div>
 
             <div class="mb-3">
-                <b-button variant="outline-success" @click="addTheme">
+                <b-button variant="success" @click="addTheme">
                     Add New Theme
                 </b-button>
             </div>
