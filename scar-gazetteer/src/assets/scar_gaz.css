@@ -1,0 +1,132 @@
+
+#header {
+    text-align: center;
+}
+#header img {
+    margin-top:2em;
+}
+#header h1 {
+    margin-top: 1em;
+}
+
+/* override default blue as to not confuse with links */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--bs-dark);
+}
+
+h4 {
+    padding-top: 1em;
+}
+
+/* ensure that there is always a fixed height where the navbar would be, so that when it gets affixed the page content doesn't jump up */
+#main-menu-placeholder {
+    height: 72px;
+}
+
+/* make sure the main menu stays above the map on the display name page */
+#main-menu-placeholder .affix {
+    z-index: 1001;
+}
+
+/* the offset that the main-menu affix will stick to when the page is scrolled down */
+#main-menu {
+    top: 10px;
+    width: 100%;
+}
+
+#side-menu .nav {
+    margin-top: 12px;
+}
+
+.bottom-padded {
+    padding-bottom:60px;
+}
+
+/* the offset that the affix will stick to when the page is scrolled down, for 2nd level menus */
+/*#main-content .affix {
+top: 120px;
+}*/
+
+#main-content section {
+    padding-top: 110px;
+}
+
+/* highlight rows on the the statistics page */
+.country-stats:hover {
+    background: #f5f5f5;
+    line-height: 2em;
+}
+
+td input[type=button] {
+    margin-bottom: 10px;
+}
+
+table.small-text tr td {
+    font-size:0.8em;
+}
+
+form textarea {
+    width: 100%;
+    padding: 2px;
+}
+
+form select {
+    margin-bottom:0;
+}
+
+.form-group {
+    padding: 0.1em;
+}
+
+.form-actions {
+    border: 1px solid #e5e5e5;
+}
+
+.bi-info-circle {
+    margin-left: 0.4em;
+    cursor: help;
+}
+
+
+#aad_foot_logo img {
+    float: left;
+    margin: 0 128px 12px 12px;
+}
+
+#site_footer {
+    font-size: 0.9em;
+    padding-bottom: 2em;
+}
+
+/* used for definitions such as 'diacritics' at /download */
+.label-info {
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
+    cursor: help;
+}
+
+div.spinner-div {
+    margin: 1em;
+}
+
+div.spinner-div > .spinner {
+    width:  6rem;
+    height: 6rem;
+}
+
+button.page-link {
+  margin-right: 0;
+}
+
+#filter-input {
+  margin: 0;
+}
+
+.leaflet-container {
+  border: 1px solid var(--bs-dark);
+}
+
+/* prevents page content from shifting depending on whether there is a scrollbar */
+html {
+  scrollbar-gutter: stable;
+}

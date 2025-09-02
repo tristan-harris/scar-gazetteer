@@ -1,0 +1,18 @@
+server {
+	listen 80;
+
+	access_log /var/log/nginx/access.log combined;
+	error_log /var/log/nginx/error.log warn;
+  gzip on;
+
+  location / {
+    root   /usr/share/nginx/html;
+    index  index.html;
+    try_files $uri $uri/ /index.html;
+    gzip_static on;
+  }
+
+  location /user/api {
+    proxy_pass https://data.aad.gov.au/user/api;
+  }
+}

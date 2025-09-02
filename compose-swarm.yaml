@@ -1,0 +1,69 @@
+version: '3.7'
+
+services:
+  web:
+    image: ${CONTAINER_IMAGE_FRONTEND}
+    depends_on:
+      - api
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 20s
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=aadc-traefik-net"
+        - "traefik.default.protocol=http"
+        - "traefik.http.routers.${APP_NAME_DEPLOYMENT}_web.rule=Host(`${APP_HOST}`)"
+        - "traefik.http.services.${APP_NAME_DEPLOYMENT}_web.loadbalancer.server.port=80"
+    logging:
+      driver: loki
+      options:
+        loki-url: ${LOKI_URL}
+        loki-external-labels: "container_name=${APP_NAME_DEPLOYMENT}_web,environment=prod,containerID={{.ID}}"
+    networks:
+      - aadc-traefik-net
+
+  api:
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: '1'
+          memory: 4G
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 20s
+      labels:
+        - "traefik.enable=true"
+        - "traefik.docker.network=aadc-traefik-net"
+        - "traefik.default.protocol=http"
+        - "traefik.http.routers.${APP_NAME_DEPLOYMENT}_api.rule=Host(`${APP_HOST}`) && PathPrefix(`/api`)"
+        - "traefik.http.services.${APP_NAME_DEPLOYMENT}_api.loadbalancer.server.port=${API_PORT}"
+        # Middleware is required to correctly route to the API without the PathPrefix being passed to the API service,
+        # otherwise all requests will send /${APP_PROXY_PATH}/api/{{REQUEST}} and the API wont know how to serve the request due
+        # to the extra path.
+        - "traefik.http.middlewares.stripprefix_${APP_NAME_DEPLOYMENT}_api.stripprefix.prefixes=/api"
+        - "traefik.http.middlewares.stripprefix_${APP_NAME_DEPLOYMENT}_api.stripprefix.forceslash=false"
+        - "traefik.http.routers.${APP_NAME_DEPLOYMENT}_api.middlewares=stripprefix_${APP_NAME_DEPLOYMENT}_api@docker"
+    logging:
+      driver: loki
+      options:
+        loki-url: ${LOKI_URL}
+        loki-external-labels: "container_name=${APP_NAME_DEPLOYMENT}_api,environment=prod,containerID={{.ID}}"
+    networks:
+      - aadc-traefik-net
+
+networks:
+  aadc-traefik-net:
+    external: true
